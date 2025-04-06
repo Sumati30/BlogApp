@@ -30,6 +30,7 @@ public class FileUploadService implements FileService{
         String fileName=randomId.concat(originalFileName.substring(originalFileName.lastIndexOf('.')));//this preserves original extension
         String filePath=path + File.separator + fileName;
         System.out.println(filePath);
+        System.out.println(filePath);
 
         //check if path exist and create
         File folder=new File(path);
