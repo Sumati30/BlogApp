@@ -36,7 +36,6 @@ public class FileUploadService implements FileService{
         File folder=new File(path);
         if(!folder.exists()) folder.mkdir();
 
-
         //upload to server
         Files.copy(file.getInputStream(), Paths.get(filePath));
 

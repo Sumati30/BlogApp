@@ -7,6 +7,7 @@ import com.BlogApp.demo.demo.Repositories.BlogRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.jaxb.SourceType;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,20 +64,31 @@ public class BlogService {
         return imgpathurl;
     }
 
-    public void deleteBlog(Long id) {
+    public boolean deleteBlog(Long id) {
+//        BlogEntity blog = blogRepository.findById(id).orElseThrow(() ->
+//                new NoSuchElementException("Blog not found with id: " + id));
+
         BlogEntity blog = blogRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Blog not found with id: " + id));
+        System.out.println(blog);//BlogEntity(id=103, title=SkyPainting, content=testing, imgurl=557f530a-f109-4ee2-90cc-18d537eb1e49.png)
 
-        // Delete the image file from the server
-        deleteFile(blog.getImgurl());
+        if(blog.getContent().isEmpty()){
+            return false;
+        }else {
+            // Delete the image file from the server
+            deleteFile(blog.getImgurl());
 
-        // Delete the blog entry from the database
-        blogRepository.delete(blog);
+            // Delete the blog entry from the database
+            blogRepository.delete(blog);
+            return true;
+        }
     }
 
     private void deleteFile(String filePath) {
         if (filePath != null && !filePath.isEmpty()) {
             File file = new File(imagePath + File.separator + filePath);
+            System.out.println(filePath); //5f3ecda0-16ae-4255-a917-c8b6ec126572.png
+            System.out.println(file); // images\5f3ecda0-16ae-4255-a917-c8b6ec126572.png
             if (file.exists()) {
                 file.delete();
             }
